@@ -1,10 +1,22 @@
 <html>
 <body>
 	<?php 
-if(isset($_POST['create'])) {
-	$usrname = $_POST['username'];
-	$usrtoken = $_POST['password'];
+function test_input($data) {
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$usrname = test_input($_POST["username"]);
+	$usrtoken = test_input($_POST["password"]);
+
+if (!filter_var($usrname, FILTER_VALIDATE_EMAIL)) {
+	$usrnameErr = "Invalid email format. Please use-- example@email.com--format";
+}
+
+if(isset($_POST['create'])) {
 	if ($usrname === '') {
 		echo "Please Provide an Email Address <br/>";
 	}elseif ($usrtoken === '') {
@@ -33,6 +45,7 @@ if(isset($_POST['create'])) {
 		}
 	}
 }
+
 if (isset($_POST['submit'])) {
 	$usrname = $_POST['username'];
 	$usrtoken = $_POST['password'];
@@ -60,6 +73,7 @@ if (isset($_POST['submit'])) {
 		mysqli_close($dbc);
 		// echo " <br /> Connection is Closed";
 	}
+}
 }
 
 
